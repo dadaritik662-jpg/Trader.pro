@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ट्रेडर प्रो</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;500;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e13;--p1:#121922;--p2:#18212c;--line:#243040;--tx:#e8edf3;--mut:#8a98a9;--up:#18c98a;--dn:#f0505c;--ac:#4c8dff;--gd:#f2b632;color-scheme:dark;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef1f5;--p1:#fff;--p2:#f3f5f8;--line:#d9dfe7;--tx:#14202e;--mut:#5c6b7c;--up:#0b8f5f;--dn:#d02f3d;--ac:#2563d9;--gd:#b17d00;color-scheme:light}}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:'Hind',system-ui,sans-serif;font-size:16px;line-height:1.45}
+.num{font-family:'Space Grotesk','Hind',sans-serif;font-variant-numeric:tabular-nums}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 14px 8px}
+.logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:22px}
+.logo i{font-style:normal;color:var(--up)}
+.day{background:var(--p2);border:1px solid var(--line);color:var(--tx);border-radius:999px;padding:8px 14px;font:inherit;font-weight:700;cursor:pointer}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 14px}
+.sum div{background:var(--p1);border:1px solid var(--line);border-radius:12px;padding:9px 10px}
+.sum small{display:block;color:var(--mut);font-size:12px}
+.sum b{font-size:15px}
+nav{display:flex;margin:12px 14px 0;background:var(--p1);border:1px solid var(--line);border-radius:12px;padding:4px}
+nav button{flex:1;border:0;background:transparent;color:var(--mut);padding:10px;border-radius:9px;font:inherit;font-weight:700;cursor:pointer}
+nav button.on{background:var(--ac);color:#fff}
+main{padding:12px 14px 40px;max-width:720px;margin:auto}
+section{display:none}section.on{display:block}
+.box{background:var(--p1);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+h3{margin:0 0 8px;font-size:17px}
+input,select{width:100%;padding:12px;background:var(--p2);color:var(--tx);border:1px solid var(--line);border-radius:10px;font:inherit}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 2px}
+.chips button{flex:0 0 auto;background:var(--p2);color:var(--tx);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}
+.chips button.on{border-color:var(--ac);color:var(--ac)}
+.price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.price .big{font-size:32px;font-weight:700}
+.up{color:var(--up)}.dn{color:var(--dn)}
+canvas{width:100%;height:270px;display:block;border-radius:10px;background:var(--p2)}
+.lg{display:flex;gap:14px;font-size:12px;color:var(--mut);margin-top:6px}
+.lg i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:4px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cell{background:var(--p2);border-radius:10px;padding:9px 10px}
+.cell small{display:block;color:var(--mut);font-size:12px}
+.cell b{font-size:16px}
+.verdict{border-radius:12px;padding:12px;margin-top:10px;border:1px solid var(--line);background:var(--p2)}
+.verdict b{font-size:18px}
+.meter{height:8px;border-radius:6px;background:linear-gradient(90deg,var(--dn),var(--gd),var(--up));position:relative;margin:10px 0 4px}
+.meter u{position:absolute;top:-4px;width:4px;height:16px;background:var(--tx);border-radius:2px}
+.tr{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.tr button{border:0;border-radius:12px;padding:14px;font:inherit;font-weight:700;font-size:17px;color:#fff;cursor:pointer}
+.buy{background:var(--up)}.sell{background:var(--dn)}
+.note{font-size:13px;color:var(--mut);margin-top:8px}
+.warn{background:rgba(242,182,50,.14);border-left:4px solid var(--gd);padding:9px 11px;border-radius:8px;font-size:14px;margin-top:8px}
+.row{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.row small{display:block;color:var(--mut)}
+.row .r{text-align:right}
+.rst{width:100%;background:transparent;border:1px solid var(--dn);color:var(--dn);padding:10px;border-radius:10px;font:inherit;cursor:pointer}
+footer{padding:0 16px 30px;color:var(--mut);font-size:12px;text-align:center;max-width:720px;margin:auto}
+</style>
+</head>
+<body>
+<div class="top"><div class="logo">ट्रेडर <i>प्रो</i></div><button class="day num" id="next">🔄 ताज़ा भाव</button></div>
+<div class="sum">
+<div><small>नकली कैश</small><b class="num" id="s1"></b></div>
+<div><small>कुल रकम</small><b class="num" id="s2"></b></div>
+<div><small>कुल फ़ायदा/नुकसान</small><b class="num" id="s3"></b></div>
+</div>
+<nav><button data-t="mk" class="on">बाज़ार</button><button data-t="pf">मेरा पोर्टफोलियो</button></nav>
+<main>
+<section id="mk" class="on">
+<div class="box">
+<input id="q" list="dl" placeholder="कंपनी या सिंबल लिखो: RELIANCE, TCS, SBIN..." autocomplete="off">
+<datalist id="dl"></datalist>
+<div class="chips" id="chips"></div>
+</div>
+<div class="box">
+<div style="display:flex;justify-content:space-between;gap:8px"><div><h3 id="cn" style="margin:0"></h3><small id="cs" style="color:var(--mut)"></small></div></div>
+<div class="price"><span class="big num" id="cp"></span><span class="num" id="cc"></span></div>
+<canvas id="cv"></canvas>
+<div class="lg"><span><i style="background:var(--gd)"></i>20 दिन औसत</span><span><i style="background:var(--ac)"></i>50 दिन औसत</span></div>
+<p id="cd" class="note" style="font-size:14px"></p>
+</div>
+<div class="box"><h3>विश्लेषण</h3>
+<div class="grid" id="gr"></div>
+<div class="verdict"><b id="vt"></b>
+<div class="meter"><u id="mu"></u></div>
+<div id="vx" style="font-size:14px;color:var(--mut)"></div></div>
+<div class="note">यह सिर्फ़ गणित पर आधारित रुझान है, भविष्य की पक्की भविष्यवाणी या खरीद-बिक्री की सलाह नहीं।</div>
+</div>
+<div class="box"><h3>प्रैक्टिस ट्रेड (नकली पैसा)</h3>
+<input id="qty" type="number" inputmode="numeric" min="1" value="10" placeholder="कितने शेयर">
+<div class="note" id="est"></div>
+<div class="tr"><button class="buy" id="bb">खरीदो</button><button class="sell" id="bs">बेचो</button></div>
+<div id="msg"></div>
+</div>
+</section>
+<section id="pf">
+<div class="box"><h3>मेरे शेयर</h3><div id="hl"></div></div>
+<div class="box"><h3>पुराने ट्रेड</h3><div id="th"></div></div>
+<button class="rst" id="rs">सब रीसेट करो (₹10,00,000 से फिर शुरू)</button>
+</section>
+</main>
+<footer>भाव Yahoo Finance से आते हैं और 15 मिनट तक देरी से हो सकते हैं। यह ऐप सिर्फ़ सीखने और नकली पैसे से प्रैक्टिस के लिए है, निवेश की सलाह नहीं। शेयर बाज़ार में पैसा डूब सकता है।</footer>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var CO=[
+['RELIANCE','रिलायंस इंडस्ट्रीज़',2900,.016,'तेल-गैस, रिटेल, जियो','देश की सबसे बड़ी कंपनियों में से एक। जियो और रिलायंस रिटेल इसके बड़े कारोबार हैं।'],
+['TCS','टाटा कंसल्टेंसी (TCS)',4000,.013,'आईटी सर्विस','टाटा समूह की सॉफ्टवेयर कंपनी। दुनिया भर की कंपनियों का आईटी काम करती है।'],
+['HDFCBANK','एचडीएफसी बैंक',1700,.012,'बैंक','देश का सबसे बड़ा प्राइवेट बैंक। लोन और जमा इसका मुख्य काम है।'],
+['INFY','इन्फोसिस',1800,.015,'आईटी सर्विस','बेंगलुरु की बड़ी आईटी कंपनी। ज़्यादातर कमाई विदेशी ग्राहकों से।'],
+['ICICIBANK','आईसीआईसीआई बैंक',1250,.014,'बैंक','बड़ा प्राइवेट बैंक, रिटेल लोन और डिजिटल बैंकिंग में मज़बूत।'],
+['SBIN','स्टेट बैंक ऑफ़ इंडिया',800,.017,'सरकारी बैंक','देश का सबसे बड़ा सरकारी बैंक, पूरे भारत में शाखाएँ।'],
+['TATAMOTORS','टाटा मोटर्स',950,.022,'गाड़ियाँ','कार, ट्रक और जगुआर लैंड रोवर की मालिक कंपनी।'],
+['ITC','आईटीसी',470,.011,'FMCG, सिगरेट, होटल','सिगरेट, खाने का सामान और होटल का कारोबार। डिविडेंड के लिए जानी जाती है।'],
+['ADANIENT','अदाणी एंटरप्राइज़ेज़',2500,.03,'इन्फ्रा, खनन','अदाणी समूह की मुख्य कंपनी। भाव में उतार-चढ़ाव काफ़ी ज़्यादा रहता है।'],
+['WIPRO','विप्रो',300,.015,'आईटी सर्विस','पुरानी भारतीय आईटी कंपनी, सॉफ्टवेयर और कंसल्टिंग।'],
+['BHARTIARTL','भारती एयरटेल',1600,.015,'टेलीकॉम','मोबाइल और ब्रॉडबैंड कंपनी, भारत और अफ़्रीका में सेवा।'],
+['LT','लार्सन एंड टुब्रो',3600,.015,'निर्माण, इंजीनियरिंग','पुल, मेट्रो, इमारतें बनाने वाली बड़ी इंजीनियरिंग कंपनी।'],
+['MARUTI','मारुति सुज़ुकी',12000,.013,'कार','भारत की सबसे ज़्यादा कारें बेचने वाली कंपनी।'],
+['SUNPHARMA','सन फ़ार्मा',1700,.014,'दवाइयाँ','भारत की सबसे बड़ी दवा कंपनियों में से एक।'],
+['ASIANPAINT','एशियन पेंट्स',2400,.012,'पेंट','घरों के रंग-रोगन में देश की नंबर एक कंपनी।'],
+['BAJFINANCE','बजाज फ़ाइनेंस',7000,.019,'लोन, फ़ाइनेंस','कंज़्यूमर लोन और EMI पर सामान देने वाली बड़ी कंपनी।'],
+['HINDUNILVR','हिंदुस्तान यूनिलीवर',2400,.01,'रोज़मर्रा का सामान','साबुन, चाय, शैम्पू जैसे घर-घर के ब्रांड बनाती है।'],
+['TATASTEEL','टाटा स्टील',150,.021,'स्टील','स्टील बनाने वाली बड़ी कंपनी। भाव स्टील की माँग से चलता है।'],
+['ONGC','ओएनजीसी',270,.018,'तेल-गैस खोज','सरकारी कंपनी जो ज़मीन से कच्चा तेल और गैस निकालती है।'],
+['ZOMATO','ज़ोमैटो',250,.028,'फ़ूड डिलीवरी','खाना घर तक पहुँचाने वाला ऐप। नई कंपनी, इसलिए उतार-चढ़ाव ज़्यादा।']
+].map(function(a){return{s:a[0],n:a[1],b:a[2],v:a[3],sec:a[4],d:a[5]}});
+
+
+function lo(){try{var v=localStorage.getItem('tp2');if(v)return JSON.parse(v)}catch(e){}return null}
+function save(){try{localStorage.setItem('tp2',JSON.stringify(st))}catch(e){}}
+var st=lo()||{cash:1000000,hold:{},hist:[],sel:'RELIANCE'};
+function inr(n,d){return '₹'+n.toLocaleString('en-IN',{maximumFractionDigits:d===undefined?0:d,minimumFractionDigits:d||0})}
+function pct(n){return (n>=0?'+':'')+n.toFixed(2)+'%'}
+function cls(n){return n>=0?'up':'dn'}
+var D={};
+function find(s){return CO.filter(function(c){return c.s===s})[0]||{s:s,n:s,sec:'NSE कंपनी',d:'इस कंपनी का विवरण अभी जोड़ा नहीं गया, पर चार्ट और विश्लेषण असली भाव से हैं।'}}
+async function get(s,force){
+  if(!force&&D[s]&&Date.now()-D[s].t<60000)return D[s].a;
+  var r=await fetch('/api/chart?s='+encodeURIComponent(s));
+  if(!r.ok)throw new Error('x');
+  var j=await r.json();
+  if(!j.c||j.c.length<62)throw new Error('short');
+  D[s]={a:j.c,t:Date.now()};return j.c;
+}
+function price(s){return D[s]?D[s].a[D[s].a.length-1].c:null}
+function sma(a,n){var i=a.length;if(i<n)return null;var t=0;for(var j=i-n;j<i;j++)t+=a[j].c;return t/n}
+function smaAt(a,n,i){if(i+1<n)return null;var t=0;for(var j=i-n+1;j<=i;j++)t+=a[j].c;return t/n}
+function rsi(a,n){var g=0,l=0,i=a.length-n;for(;i<a.length;i++){var d=a[i].c-a[i-1].c;if(d>0)g+=d;else l-=d}if(l===0)return 100;var rs=g/l;return 100-100/(1+rs)}
+
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()}
+function draw(a){
+  var cv=$('cv'),dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight;
+  cv.width=W*dpr;cv.height=H*dpr;var g=cv.getContext('2d');g.scale(dpr,dpr);
+  var N=60,st0=a.length-N,v=a.slice(st0),mx=-1e9,mn=1e9;
+  v.forEach(function(x){if(x.h>mx)mx=x.h;if(x.l<mn)mn=x.l});
+  var pad=(mx-mn)*.08;mx+=pad;mn-=pad;
+  var Y=function(p){return 8+(mx-p)/(mx-mn)*(H-30)},bw=(W-52)/N;
+  g.strokeStyle=css('--line');g.fillStyle=css('--mut');g.font='11px sans-serif';g.lineWidth=1;
+  for(var i=0;i<=4;i++){var p=mn+(mx-mn)*i/4,y=Y(p);g.beginPath();g.moveTo(0,y);g.lineTo(W-48,y);g.stroke();g.fillText(Math.round(p).toLocaleString('en-IN'),W-46,y+4)}
+  var up=css('--up'),dn=css('--dn');
+  v.forEach(function(x,i){var cx=i*bw+bw/2,c=x.c>=x.o?up:dn;g.strokeStyle=c;g.fillStyle=c;g.beginPath();g.moveTo(cx,Y(x.h));g.lineTo(cx,Y(x.l));g.stroke();var y1=Y(Math.max(x.o,x.c)),hh=Math.max(1.5,Math.abs(Y(x.o)-Y(x.c)));g.fillRect(cx-bw*.35,y1,bw*.7,hh)});
+  [[20,'--gd'],[50,'--ac']].forEach(function(m){g.strokeStyle=css(m[1]);g.lineWidth=1.6;g.beginPath();var s=false;v.forEach(function(x,i){var q=smaAt(a,m[0],st0+i);if(q===null)return;var cx=i*bw+bw/2;if(!s){g.moveTo(cx,Y(q));s=true}else g.lineTo(cx,Y(q))});g.stroke()});
+}
+function cell(l,v,c){return '<div class="cell"><small>'+l+'</small><b class="num '+(c||'')+'">'+v+'</b></div>'}
+
+function equity(){var t=st.cash,k;for(k in st.hold)t+=st.hold[k].q*(price(k)||st.hold[k].avg);return t}
+function head(){
+  var e=equity(),pl=e-1000000;
+  $('s1').textContent=inr(st.cash);$('s2').textContent=inr(e);
+  var x=$('s3');x.textContent=inr(pl);x.className='num '+cls(pl);
+}
+async function market(){
+  var c=find(st.sel);
+  $('cn').textContent=c.n;$('cs').textContent=c.s+' · '+c.sec;$('cd').textContent=c.d;
+  $('cp').textContent='लोड हो रहा है...';$('cc').textContent='';
+  var a;
+  try{a=await get(st.sel)}catch(e){$('cp').textContent='—';$('cd').textContent='इस कंपनी के भाव नहीं मिले। सिंबल सही लिखो (जैसे RELIANCE) या थोड़ी देर बाद कोशिश करो।';$('gr').innerHTML='';$('vt').textContent='';$('vx').textContent='';return}
+  if(c.s!==st.sel)return;
+  var last=a[a.length-1],prev=a[a.length-2];
+  $('cp').textContent=inr(last.c,2);
+  var ch=(last.c/prev.c-1)*100,cc=$('cc');cc.textContent=pct(ch)+' आज';cc.className='num '+cls(ch);
+  draw(a);
+  var s20=sma(a,20),s50=sma(a,50),r=rsi(a,14),w=a.slice(-60),hi=Math.max.apply(null,w.map(function(x){return x.h})),lo2=Math.min.apply(null,w.map(function(x){return x.l}));
+  var w20=a.slice(-20),sup=Math.min.apply(null,w20.map(function(x){return x.l})),res=Math.max.apply(null,w20.map(function(x){return x.h}));
+  var c20=(last.c/a[a.length-21].c-1)*100,c60=(last.c/a[a.length-61].c-1)*100;
+  var vol=Math.sqrt(a.slice(-20).reduce(function(t,x,i,z){var q=i?Math.log(x.c/z[i-1].c):0;return t+q*q},0)/19)*100;
+  $('gr').innerHTML=cell('20 दिन में बदलाव',pct(c20),cls(c20))+cell('60 दिन में बदलाव',pct(c60),cls(c60))+cell('60 दिन का ऊँचा',inr(hi,2))+cell('60 दिन का नीचा',inr(lo2,2))+cell('सपोर्ट (नीचे रुकावट)',inr(sup,2))+cell('रेसिस्टेंस (ऊपर रुकावट)',inr(res,2))+cell('RSI (14)',r.toFixed(0),r>70?'dn':r<30?'up':'')+cell('रोज़ का उतार-चढ़ाव',vol.toFixed(1)+'%');
+  var sc=50,tx=[];
+  if(last.c>s20&&s20>s50){sc+=25;tx.push('भाव दोनों औसत से ऊपर है, रुझान ऊपर का है।')}
+  else if(last.c<s20&&s20<s50){sc-=25;tx.push('भाव दोनों औसत से नीचे है, रुझान नीचे का है।')}
+  else tx.push('रुझान मिला-जुला है, साफ़ दिशा नहीं।');
+  if(r>70){sc-=15;tx.push('RSI बहुत ऊँचा है, यानी भाव तेज़ी से चढ़ चुका है। यहाँ से गिरावट का ख़तरा बढ़ जाता है।')}
+  else if(r<30){sc+=15;tx.push('RSI बहुत नीचा है, यानी भाव बहुत गिर चुका है। उछाल संभव है, पर पक्का नहीं।')}
+  if(c20>8)sc+=8;else if(c20<-8)sc-=8;
+  if(vol>2.2)tx.push('उतार-चढ़ाव ज़्यादा है। कम शेयर लो और स्टॉप-लॉस ज़रूर रखो।');
+  tx.push('सीखने का तरीका: स्टॉप-लॉस सपोर्ट '+inr(sup,0)+' के थोड़ा नीचे रखना ठीक रहता है।');
+  sc=Math.max(5,Math.min(95,sc));
+  $('vt').textContent=sc>=65?'रुझान: मज़बूत':sc<=35?'रुझान: कमज़ोर':'रुझान: मिला-जुला';
+  $('vt').style.color=sc>=65?css('--up'):sc<=35?css('--dn'):css('--gd');
+  $('mu').style.left='calc('+sc+'% - 2px)';
+  $('vx').innerHTML=tx.join('<br>');
+  est();
+}
+function est(){var q=+$('qty').value||0,p=price(st.sel);$('est').textContent=(q&&p)?('कीमत: '+inr(q*p,2)+' · '+(q*p/equity()*100).toFixed(1)+'% पूँजी'):''}
+function msg(t,bad){var m=$('msg');m.innerHTML='<div class="warn" style="'+(bad?'':'border-color:var(--up)')+'"></div>';m.firstChild.textContent=t}
+function trade(side){
+  var q=Math.floor(+$('qty').value),p=price(st.sel),s=st.sel;
+  if(p==null){msg('भाव लोड नहीं हुआ।',1);return}
+  if(!q||q<1){msg('शेयर की संख्या भरो।',1);return}
+  var h=st.hold[s],dt=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+  if(side==='B'){
+    if(q*p>st.cash){msg('नकली कैश कम है।',1);return}
+    var nq=(h?h.q:0)+q,avg=((h?h.q*h.avg:0)+q*p)/nq;
+    st.hold[s]={q:nq,avg:avg};st.cash-=q*p;st.hist.unshift({d:dt,s:s,t:'B',q:q,p:p});
+    var share=st.hold[s].q*p/equity()*100;
+    msg(q+' शेयर खरीदे। '+(share>20?'ध्यान दो: एक शेयर में 20% से ज़्यादा पैसा है, यह खतरनाक है।':'अब स्टॉप-लॉस सोच लो।'),share>20);
+  }else{
+    if(!h||h.q<q){msg('इतने शेयर आपके पास नहीं हैं।',1);return}
+    var pl=(p-h.avg)*q;h.q-=q;st.cash+=q*p;if(h.q===0)delete st.hold[s];
+    st.hist.unshift({d:dt,s:s,t:'S',q:q,p:p,pl:pl});
+    msg(q+' शेयर बेचे। '+(pl>=0?'फ़ायदा ':'नुकसान ')+inr(Math.abs(pl))+'.',pl<0);
+  }
+  save();head();est();port();
+}
+async function port(){
+  await Promise.all(Object.keys(st.hold).map(function(k){return get(k).catch(function(){return 0})}));
+  head();
+  var k,h='';
+  for(k in st.hold){var o=st.hold[k],p=price(k)||o.avg,pl=(p-o.avg)*o.q;
+    h+='<div class="row"><div><b>'+k+'</b><small>'+o.q+' शेयर · औसत '+inr(o.avg,2)+'</small></div><div class="r num"><b>'+inr(o.q*p)+'</b><small class="'+cls(pl)+'">'+inr(pl)+' ('+pct((p/o.avg-1)*100)+')</small></div></div>'}
+  $('hl').innerHTML=h||'<div class="note">अभी कोई शेयर नहीं। बाज़ार टैब में जाकर प्रैक्टिस शुरू करो।</div>';
+  var t='';st.hist.slice(0,30).forEach(function(x){
+    t+='<div class="row"><div><b>'+(x.t==='B'?'खरीदा':'बेचा')+' '+x.s+'</b><small>'+x.d+' · '+x.q+' @ '+inr(x.p,2)+'</small></div><div class="r num">'+(x.t==='S'?'<b class="'+cls(x.pl)+'">'+inr(x.pl)+'</b>':'')+'</div></div>'});
+  $('th').innerHTML=t||'<div class="note">अभी कोई ट्रेड नहीं।</div>';
+}
+function pick(s){st.sel=s;save();chips();$('q').value='';market()}
+function chips(){
+  var c=$('chips');c.innerHTML='';
+  CO.forEach(function(o){var b=document.createElement('button');b.textContent=o.s;if(o.s===st.sel)b.className='on';b.onclick=function(){pick(o.s)};c.appendChild(b)});
+}
+var dl=$('dl');CO.forEach(function(o){var op=document.createElement('option');op.value=o.s;op.label=o.n;dl.appendChild(op);var o2=document.createElement('option');o2.value=o.n;dl.appendChild(o2)});
+$('q').onchange=function(){var v=this.value.trim();if(!v)return;var l=v.toLowerCase(),f=CO.filter(function(o){return o.s.toLowerCase()===l||o.n.toLowerCase().indexOf(l)>-1||o.s.toLowerCase().indexOf(l)>-1})[0];pick(f?f.s:v.toUpperCase().replace(/\s+/g,''))};
+$('qty').oninput=est;
+$('bb').onclick=function(){trade('B')};$('bs').onclick=function(){trade('S')};
+$('next').onclick=function(){D={};market();port();$('msg').innerHTML=''};
+$('rs').onclick=function(){if(confirm('सब कुछ रीसेट करना है?')){st={cash:1000000,hold:{},hist:[],sel:'RELIANCE'};save();chips();head();market();port()}};
+var bt=document.querySelectorAll('nav button');
+bt.forEach(function(b){b.onclick=function(){bt.forEach(function(x){x.classList.toggle('on',x===b)});['mk','pf'].forEach(function(i){$(i).classList.toggle('on',i===b.dataset.t)});if(b.dataset.t==='mk')market();else port();window.scrollTo(0,0)}});
+window.addEventListener('resize',function(){if($('mk').classList.contains('on'))market()});
+chips();head();market();port();
+})();
+</script>
+</body>
+</html>
